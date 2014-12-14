@@ -123,6 +123,10 @@ int main ()
 	g.addConnection (0,2);
 	g.addConnection (1,5);
 	g.printGraph ();
+	Graph<int> g2(3,true);
+
+	g2.addConnection (0,1);
+	g2.addConnection (0,2);
+	g2.printGraph ();
 	return 0;
 }
-
