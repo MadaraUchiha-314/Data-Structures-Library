@@ -18,7 +18,7 @@
  */
 /*
  * This library does not really take note on the data that the graph will store 
- * but will rather look at the connections and theier weights
+ * but will rather look at the connections and theier weight
  * but at some point of time it may be required to manipulate the data so providing an optional class to store data
  */
 
@@ -37,12 +37,32 @@ class Node
 {
 	T data;
 };
-
+/*
+ * Edge stores a n edge between two nodes
+ * option of weight is given
+ * defaut weight is 1
+ */
+class Edge
+{
+	public :
+	unsigned int to;
+	unsigned int weight;
+};
+/*
+ * Custom made exception for detecting connections between nodes that dont exist
+ */
+class outOfBoundsException : public std::exception
+{
+       virtual const char* what() const throw ()
+       {
+		return "No such connection can be made...!!";
+       }
+};       
 template <class T>
 class Graph
 {
 	unsigned int numNodes;
-	std::list<unsigned int>* nodeConnections;
+	std::list<Edge>* nodeConnections;
 	Node<T>* node;
 
 	public :
@@ -54,7 +74,7 @@ class Graph
 	}
 	Graph (unsigned int numNodes)
 	{
-		nodeConnections = new std::list<unsigned int>[numNodes];
+		nodeConnections = new std::list<Edge>[numNodes];
 		node = NULL;
 
 		/*
@@ -69,7 +89,7 @@ class Graph
 	Graph (unsigned int numNodes,bool requireData)
 	{
 		this->numNodes = numNodes;
-		nodeConnections = new std::list<unsigned int>[numNodes];
+		nodeConnections = new std::list<Edge>[numNodes];
 		
 		if (requireData==true)
 			node = new Node<T>[numNodes];
@@ -93,23 +113,45 @@ class Graph
 
 	void addConnection (unsigned int from,unsigned int to) 
 	{
+		Edge tempEdge;
+		tempEdge.to = to;
+		tempEdge.weight=1;
 		try
 		{
-			nodeConnections[from].push_back (to);
+			if (from >=numNodes || to>=numNodes)
+				throw new outOfBoundsException; 
+			else
+				nodeConnections[from].push_back (tempEdge);
 		}
 		catch (std::exception& e)
 		{
 			std::cout<<e.what ()<<"\n";	
 		}
 	}
-
+	void addConnection (unsigned int from,unsigned int to,unsigned int weight)
+	{
+		Edge tempEdge;
+		tempEdge.to = to;
+		tempEdge.weight = weight;
+		try
+		{
+			if (from >=numNodes || to>=numNodes)
+				throw new outOfBoundsException; 
+			else
+				nodeConnections[from].push_back (tempEdge);
+		}
+		catch (std::exception& e)
+		{
+			std::cout<<e.what ()<<"\n";	
+		}
+	}
 	void printGraph ()
 	{
 		for (int i=0;i<numNodes;i++)
 		{
 			std::cout<<i<<" is connected with -> ";
-			for (std::list<unsigned int>::iterator it=nodeConnections[i].begin ();it!=nodeConnections[i].end();it++)
-				std::cout<<*it<<" -> ";	
+			for (std::list<Edge>::iterator it=nodeConnections[i].begin ();it!=nodeConnections[i].end();it++)
+				std::cout<<it->to<<" -> ";	
 			std::cout<<"\n";
 		}
 	}
@@ -122,11 +164,9 @@ int main ()
 	g.addConnection (0,1);
 	g.addConnection (0,2);
 	g.addConnection (1,5);
+	g.addConnection (2,6,4);
+	//g.addConnection (11,100);
 	g.printGraph ();
-	Graph<int> g2(3,true);
-
-	g2.addConnection (0,1);
-	g2.addConnection (0,2);
-	g2.printGraph ();
 	return 0;
 }
+
