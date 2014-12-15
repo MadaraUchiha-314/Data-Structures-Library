@@ -10,7 +10,7 @@
  * 7. planarity
  * 8. isomorphism
  *
- * These will take years to impelement by lets give it a start already
+ * These will take years to impelement, but lets give it a start already
  */
 
  /*
@@ -25,22 +25,8 @@ template <class T>
 class GraphAlgorithm
 {
 	bool* visited;
-	
-	public :
 
-	GraphAlgorithm (unsigned int numNodes)
-	{
-		visited = new bool[numNodes];
-		for (int i=0;i<numNodes;i++)
-			visited[i] = false;
-	}
-	~GraphAlgorithm ()
-	{
-		delete[] visited;
-		visited = NULL;
-	}
-	
-	bool dfs (Graph<T>* g,unsigned int node_number,T data)
+	bool dfsHelper (Graph<T>* g,unsigned int node_number,T data)
 	{
 		
 		visited[node_number] = true;
@@ -60,7 +46,7 @@ class GraphAlgorithm
 			// cout<<"candidate for false "<<it->to<<"\n";
 			if (visited[it->to] == false)
 			{
-				if (dfs (g,it->to,data)==false)
+				if (dfsHelper (g,it->to,data)==false)
 					continue;
 				else
 					return true;
@@ -69,17 +55,39 @@ class GraphAlgorithm
 		}
 
 
-
 	}
 	
-	bool dfs (Graph<T>* g,T data)
+	public :
+
+	GraphAlgorithm (unsigned int numNodes)
 	{
+		visited = new bool[numNodes];
+		for (int i=0;i<numNodes;i++)
+			visited[i] = false;
+	}
+	~GraphAlgorithm ()
+	{
+		delete[] visited;
+		visited = NULL;
+	}
+	
+	bool dfs(Graph<T>* g,unsigned int node_number,T data)
+	{
+
 		unsigned int numNodes = g->getNoOfNodes ();
 		
 		for (int i=0;i<numNodes;i++)
 			visited[i] = false;
-		dfs (g,0,data);
+		return dfsHelper (g,node_number,data);
+	}
+	bool dfs (Graph<T>* g,T data)
+	{
 		
+		unsigned int numNodes = g->getNoOfNodes ();
+		
+		for (int i=0;i<numNodes;i++)
+			visited[i] = false;
+		return dfsHelper (g,0,data);
 	}
 };
 
