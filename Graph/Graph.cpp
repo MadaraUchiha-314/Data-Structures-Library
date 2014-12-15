@@ -21,12 +21,6 @@
  * but will rather look at the connections and theier weight
  * but at some point of time it may be required to manipulate the data so providing an optional class to store data
  */
-/*
- * Also no default constructor is provided
- * i really dint want to provide a resizeable number of nodes
- * vector make things slow
- * so no initialising as Graph g; OK...?
- */
 
 #include <list>
 #include <cstdlib>
@@ -127,7 +121,14 @@ class Graph
 		if (node!=NULL)
 			delete[] node;
 	}
-	
+	std::list<Edge>* getConnctionListPointer ()
+	{
+		return nodeConnections;
+	}
+	Node<T>* getDataListPointer ()
+	{
+		return node;
+	}	
 	void addConnection (unsigned int from,unsigned int to) 
 	{
 		Edge tempEdge;
@@ -241,8 +242,8 @@ int main ()
 
 	g.printGraph ();
 	g.printGraphData ();
-
 	std::cout<<"\n"<<g.getData (2);
+
 
 	return 0;
 }
