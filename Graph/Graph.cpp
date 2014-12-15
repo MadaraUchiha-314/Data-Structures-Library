@@ -36,6 +36,15 @@ template <class T>
 class Node
 {
 	T data;
+	public :
+	void setData (T data)
+	{
+		this->data = data;
+	}
+	T getData ()
+	{
+		return data;
+	}
 };
 /*
  * Edge stores a n edge between two nodes
@@ -57,7 +66,15 @@ class outOfBoundsException : public std::exception
        {
 		return "No such connection can be made...!!";
        }
-};       
+};      
+class noDataInGraphException : public std::exception
+{
+       virtual const char* what() const throw ()
+       {
+		return "Data cannot be inserted/printed";
+       }
+};
+
 template <class T>
 class Graph
 {
@@ -145,28 +162,81 @@ class Graph
 			std::cout<<e.what ()<<"\n";	
 		}
 	}
+	void addData (unsigned int nodeNumber,T data)
+	{
+		try
+		{
+
+			if (nodeNumber >= numNodes)
+				throw new outOfBoundsException;
+			if (node==NULL)
+				throw new noDataInGraphException;
+			node[nodeNumber].setData (data);
+		}
+		catch (std::exception& e)
+		{
+			std::cout<<e.what ()<<"\n";	
+		}
+		
+	}
+
 	void printGraph ()
 	{
-		for (int i=0;i<numNodes;i++)
+		try
 		{
-			std::cout<<i<<" is connected with -> ";
-			for (std::list<Edge>::iterator it=nodeConnections[i].begin ();it!=nodeConnections[i].end();it++)
-				std::cout<<it->to<<" -> ";	
-			std::cout<<"\n";
+			if (numNodes==0)
+				throw new noDataInGraphException;
+			else
+			{
+				
+				for (int i=0;i<numNodes;i++)
+				{
+					std::cout<<i<<" is connected with -> ";
+					for (std::list<Edge>::iterator it=nodeConnections[i].begin ();it!=nodeConnections[i].end();it++)
+						std::cout<<it->to<<" -> ";	
+					std::cout<<"\n";
+				}
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::cout<<e.what ()<<"\n";
+		}
+	}
+	void printGraphData ()
+	{
+		try
+		{
+			
+			if (node==NULL)
+				throw new noDataInGraphException;
+			else
+			{	
+				for (int i=0;i<numNodes;i++)
+				std::cout<<"Data in "<<i<<" is "<<node[i].getData ()<<"\n";
+			}
+		}
+		catch (std::exception& e)
+		{
+			std::cout<<e.what ()<<"\n";
 		}
 	}
 
-
 };
+
 int main ()
 {
-	Graph<int> g(10);
+	Graph<int> g(10,true);
 	g.addConnection (0,1);
 	g.addConnection (0,2);
 	g.addConnection (1,5);
 	g.addConnection (2,6,4);
 	//g.addConnection (11,100);
+	g.addData (1,2);
+	g.addData (2,3);
+
 	g.printGraph ();
+	g.printGraphData ();
 	return 0;
 }
 
