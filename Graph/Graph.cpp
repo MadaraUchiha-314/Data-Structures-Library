@@ -179,6 +179,10 @@ class Graph
 		}
 		
 	}
+	T getData (unsigned int nodeNumber)
+	{
+		return node[nodeNumber].getData ();
+	}
 
 	void printGraph ()
 	{
@@ -237,6 +241,8 @@ int main ()
 
 	g.printGraph ();
 	g.printGraphData ();
+
+	std::cout<<"\n"<<g.getData (2);
 	return 0;
 }
 
