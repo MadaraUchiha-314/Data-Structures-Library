@@ -89,6 +89,13 @@ class GraphAlgorithm
 			visited[i] = false;
 		return dfsHelper (g,0,data);
 	}
+	bool existsPath (Graph<T>* g, unsigned int from,unsigned int to)
+	{
+		Node<T>* tempNode = g->getDataListPointer ();
+		return dfs (g,from,tempNode[to].getData ());
+	}
+
+
 };
 
 
@@ -133,7 +140,13 @@ int main ()
 		std::cout<<"Got it by dfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
-	cout<<"DFS OVER \n";	
+	cout<<"DFS OVER \n";
+
+	cout<<ga.existsPath (&g,2,6)<<"\n";
+	cout<<ga.existsPath (&g,6,2)<<"\n";
+
+	cout<<ga.existsPath (&g,4,3)<<"\n";
+
 	return 0;
 }
 	
