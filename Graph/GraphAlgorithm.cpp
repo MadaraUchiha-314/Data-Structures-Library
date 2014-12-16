@@ -18,6 +18,7 @@
  */
 
 #include "Graph.h"
+#include <queue>
 
 using namespace std;
 
@@ -94,7 +95,42 @@ class GraphAlgorithm
 		Node<T>* tempNode = g->getDataListPointer ();
 		return dfs (g,from,tempNode[to].getData ());
 	}
+	
+	bool bfs (Graph<T>* g,unsigned int node_number,T data)
+	{
+		unsigned int numNodes = g->getNoOfNodes ();
+		Node<T> *tempNode = g->getDataListPointer ();
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
 
+
+		for (int i=0;i<numNodes;i++)
+			visited[i] = false;
+		std::queue<unsigned int> q;
+		q.push (node_number);
+
+		while (q.size () > 0)
+		{
+			unsigned int temp = q.front ();
+			q.pop ();
+			if (tempNode[temp].getData () == data)
+				return true;
+			else
+			{
+				for (std::list<Edge>::iterator it = tempList[temp].begin ();it!=tempList[temp].end ();it++)
+				{
+					if (visited[it->to] == false)
+						q.push (it->to);
+				}
+			}
+		}
+
+		return false;
+	}
+
+	bool bfs (Graph<T>* g,T data)
+	{
+		return bfs (g,0,data);
+	}
 
 };
 
@@ -147,6 +183,32 @@ int main ()
 
 	cout<<ga.existsPath (&g,4,3)<<"\n";
 
+
+
+	if (ga.bfs (&g,10) == true)
+		std::cout<<"Got it by bfs ..!! \n";
+	else
+		cout<<"Dint Get :( \n";
+	cout<<"BFS OVER \n";
+	
+	if (ga.bfs (&g,7) == true)
+		std::cout<<"Got it by bfs ..!! \n";
+	else
+		cout<<"Dint Get :( \n";
+	cout<<"BFS OVER \n";
+
+	
+	if (ga.bfs (&g,30) == true)
+		std::cout<<"Got it by bfs ..!! \n";
+	else
+		cout<<"Dint Get :( \n";
+	cout<<"BFS OVER \n";
+	
+	if (ga.bfs (&g,20) == true)
+		std::cout<<"Got it by bfs ..!! \n";
+	else
+		cout<<"Dint Get :( \n";
+	cout<<"BFS OVER \n";
 	return 0;
 }
 	
