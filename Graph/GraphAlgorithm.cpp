@@ -149,28 +149,58 @@ int main ()
 	g.addConnection (4,6);
 	g.addConnection (5,6);
 
+	/*
+	* Testingwhether graph has been made properly
+	*/ 
 	g.printGraph ();
 	
+	/* 
+	* Adding Some Data To The Graph
+	*/
 	for (int i=0;i<7;i++)
 		g.addData (i,10*i);
 
+	/* 
+	* Making an algorithm object
+	*/
 	GraphAlgorithm<int> ga(7);
 
+	/* 
+	* Testing DFS
+	*/
+
+	/*
+	* Test Case -1
+	*/
 	if (ga.dfs (&g,10) == true)
 		std::cout<<"Got it by dfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"DFS OVER \n";
+
+	/*
+	* Test Case -2
+	*/
+
 	if (ga.dfs (&g,7) == true)
 		std::cout<<"Got it by dfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"DFS OVER \n";
+
+	/*
+	* Test Case -3
+	*/
+
 	if (ga.dfs (&g,30) == true)
 		std::cout<<"Got it by dfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"DFS OVER \n";	
+
+	/*
+	* Test Case -4
+	*/
 
 	if (ga.dfs (&g,20) == true)
 		std::cout<<"Got it by dfs ..!! \n";
@@ -178,25 +208,43 @@ int main ()
 		cout<<"Dint Get :( \n";
 	cout<<"DFS OVER \n";
 
+
+	/*
+	* Testing existsPath ()
+	*/
 	cout<<ga.existsPath (&g,2,6)<<"\n";
 	cout<<ga.existsPath (&g,6,2)<<"\n";
-
 	cout<<ga.existsPath (&g,4,3)<<"\n";
 
 
+
+	/*
+	*  Testing BFS
+	*/
+	
+	/*
+	* Test Case -1
+	*/
 
 	if (ga.bfs (&g,10) == true)
 		std::cout<<"Got it by bfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
-	
+
+	/*
+	* Test Case -2
+	*/
+
 	if (ga.bfs (&g,7) == true)
 		std::cout<<"Got it by bfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
 
+	/*
+	* Test Case -3
+	*/
 	
 	if (ga.bfs (&g,30) == true)
 		std::cout<<"Got it by bfs ..!! \n";
@@ -204,17 +252,28 @@ int main ()
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
 	
+	/*
+	* Test Case -4
+	*/
+
 	if (ga.bfs (&g,20) == true)
 		std::cout<<"Got it by bfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
 
+	/*
+	* Test Case -5
+	*/
+
 	if (ga.bfs (&g,60) == true)
 		std::cout<<"Got it by bfs ..!! \n";
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
+
+
+	
 	return 0;
 }
 	
