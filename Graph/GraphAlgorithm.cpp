@@ -209,6 +209,12 @@ int main ()
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
+
+	if (ga.bfs (&g,60) == true)
+		std::cout<<"Got it by bfs ..!! \n";
+	else
+		cout<<"Dint Get :( \n";
+	cout<<"BFS OVER \n";
 	return 0;
 }
 	
