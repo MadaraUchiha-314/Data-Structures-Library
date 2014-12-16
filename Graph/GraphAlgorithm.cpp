@@ -145,11 +145,12 @@ class GraphAlgorithm
 		}
 	}
 
-	void topologicalSort (Graph<T>* g)
+	std::list<unsigned int>* topologicalSort (Graph<T>* g)
 	{
 		unsigned int numNodes = g->getNoOfNodes ();
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
 		unsigned int* inDegree = new unsigned int[numNodes];
+		std::list<unsigned int>* resultList = new std::list<unsigned int>;
 
 		queue<unsigned int> q;
 
@@ -166,10 +167,11 @@ class GraphAlgorithm
 
 		while (q.size () > 0)
 		{ 
-			int temp = q.front ();
+			unsigned int temp = q.front ();
 			visited[temp]=true;
 			
-			cout<<temp<<" -> ";
+			//cout<<temp<<" -> ";
+			resultList->push_back (temp);
 			q.pop ();
 
 			for (std::list<Edge>::iterator it = tempList[temp].begin();it!=tempList[temp].end();it++)
@@ -188,7 +190,7 @@ class GraphAlgorithm
 			}
 		}
 	
-		cout<<"\n";
+		return resultList;
 	}
 
 
@@ -359,9 +361,12 @@ int main ()
 	/*
 	 * Test Case -2
 	 */
-
-	ga.topologicalSort (&g2);
-
+	std::list<unsigned int>* result;
+	result = ga.topologicalSort (&g2);
+	for (std::list<unsigned int>::iterator it=result->begin ();it!=result->end();it++)
+		cout<<*it<<"-> ";
+	cout<<"\n";
+	
 	return 0;
 }
 	
