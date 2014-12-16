@@ -34,7 +34,6 @@ class GraphAlgorithm
 		
 		Node<T>* tempNode;
 		tempNode = g->getDataListPointer ();
-		// cout<<"In node number "<<node_number<<"\t Data he is "<<tempNode[node_number].getData ()<<"\n";
 		
 		if (tempNode[node_number].getData() == data)
 			 //cout<<"Match....!!\n";
@@ -44,7 +43,6 @@ class GraphAlgorithm
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
 		for (std::list<Edge> :: iterator it = tempList[node_number].begin ();it!=tempList[node_number].end ();it++)
 		{	
-			// cout<<"candidate for false "<<it->to<<"\n";
 			if (visited[it->to] == false)
 			{
 				if (dfsHelper (g,it->to,data)==false)
@@ -99,7 +97,7 @@ class GraphAlgorithm
 	bool bfs (Graph<T>* g,unsigned int node_number,T data)
 	{
 		unsigned int numNodes = g->getNoOfNodes ();
-		Node<T> *tempNode = g->getDataListPointer ();
+		Node<T>* tempNode = g->getDataListPointer ();
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
 
 
@@ -132,13 +130,78 @@ class GraphAlgorithm
 		return bfs (g,0,data);
 	}
 
+	void findInDegreeOfNodes (Graph<T>* g,unsigned int *inDegree)
+	{
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
+		unsigned int numNodes =  g->getNoOfNodes ();
+
+		for (unsigned int i=0;i<numNodes;i++)
+			inDegree[i]=0;
+
+		for (unsigned int i=0;i<numNodes;i++)
+		{
+			for (std::list<Edge>::iterator it=tempList[i].begin ();it!=tempList[i].end ();it++)
+				inDegree[it->to]++;
+		}
+	}
+
+	void topologicalSort (Graph<T>* g)
+	{
+		unsigned int numNodes = g->getNoOfNodes ();
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
+		unsigned int* inDegree = new unsigned int[numNodes];
+
+		queue<unsigned int> q;
+
+		for (unsigned int i=0;i<numNodes;i++)
+			visited[i]=false;
+
+		findInDegreeOfNodes (g,inDegree);
+
+		for (unsigned int i=0;i<numNodes;i++)
+		{
+			if (inDegree[i] == 0)
+				q.push (i);
+		}
+
+		while (q.size () > 0)
+		{ 
+			int temp = q.front ();
+			visited[temp]=true;
+			
+			cout<<temp<<" -> ";
+			q.pop ();
+
+			for (std::list<Edge>::iterator it = tempList[temp].begin();it!=tempList[temp].end();it++)
+			{
+				unsigned int temp2 = it->to;
+				inDegree[temp2]--;
+			}
+			
+			for (unsigned int i=0;i<numNodes;i++)
+			{
+				if (inDegree[i] == 0 && visited[i]==false)
+				{
+					q.push (i);
+					visited[i]=true;
+				}
+			}
+		}
+	
+		cout<<"\n";
+	}
+
+
+
+
 };
 
 
 int main ()
 {
 	Graph<int> g(7,true);
-	
+	Graph<int> g2(6);
+
 	g.addConnection (0,1);
 	g.addConnection (0,2);
 	g.addConnection (1,3);
@@ -271,9 +334,34 @@ int main ()
 	else
 		cout<<"Dint Get :( \n";
 	cout<<"BFS OVER \n";
-
-
 	
+	/*
+	 * Testing Topological Sort 
+	 */
+	/*
+	 * Test Case -1
+	 */
+	ga.topologicalSort (&g);
+
+	/*
+	 * Graph For test case -2
+	 */
+	g2.addConnection (0,1);
+	g2.addConnection (0,2);
+	g2.addConnection (1,3);
+	g2.addConnection (2,1);
+	g2.addConnection (2,3);
+	g2.addConnection (2,4);
+	g2.addConnection (3,4);
+	g2.addConnection (3,5);
+	g2.addConnection (4,5);
+	
+	/*
+	 * Test Case -2
+	 */
+
+	ga.topologicalSort (&g2);
+
 	return 0;
 }
 	
