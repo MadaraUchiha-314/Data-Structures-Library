@@ -232,23 +232,3 @@ class Graph
 	}
 
 };
-/*
-int main ()
-{
-	Graph<int> g(10,true);
-	g.addConnection (0,1);
-	g.addConnection (0,2);
-	g.addConnection (1,5);
-	g.addConnection (2,6,4);
-	//g.addConnection (11,100);
-	g.addData (1,2);
-	g.addData (2,3);
-
-	g.printGraph ();
-	g.printGraphData ();
-	std::cout<<"\n"<<g.getData (2);
-
-
-	return 0;
-}
-*/
