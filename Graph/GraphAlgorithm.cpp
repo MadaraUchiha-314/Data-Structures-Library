@@ -58,35 +58,50 @@ class GraphAlgorithm
 	
 	public :
 
-	GraphAlgorithm (unsigned int numNodes)
+	GraphAlgorithm ()
 	{
-		visited = new bool[numNodes];
-		for (int i=0;i<numNodes;i++)
-			visited[i] = false;
+		visited=NULL;
 	}
 	~GraphAlgorithm ()
 	{
-		delete[] visited;
-		visited = NULL;
+		if (visited!=NULL)
+			delete[] visited;
 	}
 	
 	bool dfs(Graph<T>* g,unsigned int node_number,T data)
 	{
-
+	
 		unsigned int numNodes = g->getNoOfNodes ();
+		visited = new bool[numNodes];	
 		
 		for (int i=0;i<numNodes;i++)
 			visited[i] = false;
-		return dfsHelper (g,node_number,data);
+
+		bool result;
+
+		result = dfsHelper (g,node_number,data);
+
+		delete[] visited;
+		visited=NULL;
+
+		return result;
 	}
 	bool dfs (Graph<T>* g,T data)
 	{
 		
 		unsigned int numNodes = g->getNoOfNodes ();
+		visited = new bool[numNodes];
+		bool result;
 		
 		for (int i=0;i<numNodes;i++)
 			visited[i] = false;
-		return dfsHelper (g,0,data);
+
+		result = dfsHelper (g,0,data);
+
+		delete[] visited;
+		visited=NULL;
+
+		return result;
 	}
 	bool existsPath (Graph<T>* g, unsigned int from,unsigned int to)
 	{
@@ -99,7 +114,8 @@ class GraphAlgorithm
 		unsigned int numNodes = g->getNoOfNodes ();
 		Node<T>* tempNode = g->getDataListPointer ();
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
-
+		
+		visited = new bool[g->getNoOfNodes()];	
 
 		for (int i=0;i<numNodes;i++)
 			visited[i] = false;
@@ -122,6 +138,8 @@ class GraphAlgorithm
 			}
 		}
 
+		delete[] visited;
+		visited=NULL;
 		return false;
 	}
 
@@ -152,7 +170,8 @@ class GraphAlgorithm
 		
 		unsigned int* inDegree = new unsigned int[numNodes];
 		std::list<unsigned int>* resultList = new std::list<unsigned int>;
-
+		
+		visited = new bool[numNodes];	
 		queue<unsigned int> q;
 
 		for (unsigned int i=0;i<numNodes;i++)
@@ -189,7 +208,8 @@ class GraphAlgorithm
 				}
 			}
 		}
-	
+		delete[] visited;
+		visited=NULL;
 		return resultList;
 	}
 	void shortestPath (Graph<T>* g,unsigned int from,unsigned int to)
@@ -239,6 +259,7 @@ class GraphAlgorithm
 		cout<<"Shortest Dist Is "<<shortestPath[to]<<"\n";
 
 		delete[] visited;
+		visited = NULL;
 		delete[]shortestPath;
 
 	}
@@ -280,7 +301,7 @@ int main ()
 	/* 
 	* Making an algorithm object
 	*/
-	GraphAlgorithm<int> ga(7);
+	GraphAlgorithm<int> ga;
 
 	/* 
 	* Testing DFS
