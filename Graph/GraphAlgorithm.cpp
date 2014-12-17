@@ -431,15 +431,18 @@ int main ()
 	 * Graph For Test Case 1
 	 */
 
-
 	g3.addConnection (0,1,1);
 	g3.addConnection (0,2,4);
 	g3.addConnection (1,2,2);
 	g3.addConnection (1,3,6);
 	g3.addConnection (2,3,3);
 
+	/*
+	 * Test Case -1
+	 */
 	ga.shortestPath (&g3,0,3);
 	ga.shortestPath (&g3,0,2);
+	ga.shortestPath (&g3,1,3);
 
 	
 	return 0;
