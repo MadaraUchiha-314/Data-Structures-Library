@@ -254,7 +254,8 @@ int main ()
 	Graph<int> g(7,true);
 	Graph<int> g2(6);
 	Graph<int> g3(4);
-
+	Graph<int> g4(6);
+	
 	g.addConnection (0,1);
 	g.addConnection (0,2);
 	g.addConnection (1,3);
@@ -332,8 +333,6 @@ int main ()
 	cout<<ga.existsPath (&g,2,6)<<"\n";
 	cout<<ga.existsPath (&g,6,2)<<"\n";
 	cout<<ga.existsPath (&g,4,3)<<"\n";
-
-
 
 	/*
 	*  Testing BFS
@@ -444,7 +443,29 @@ int main ()
 	ga.shortestPath (&g3,0,2);
 	ga.shortestPath (&g3,1,3);
 
+	/*
+	 * Graph For Test Case 2
+	 */
 	
+	g4.addConnection (0,1,4);
+	g4.addConnection (0,2,1);
+	g4.addConnection (0,3,1);
+	g4.addConnection (1,2,2);
+	g4.addConnection (1,5,1);
+	g4.addConnection (2,1,2);
+	g4.addConnection (2,5,4);
+	g4.addConnection (2,4,3);
+	g4.addConnection (3,2,4);
+	g4.addConnection (3,4,2);
+	g4.addConnection (4,5,1);
+
+	for (unsigned int i=0;i<6;i++)
+	{
+		cout<<"to -> "<<i<<" ";
+		ga.shortestPath (&g4,0,i);
+	}
+	
+
 	return 0;
 }
 	
