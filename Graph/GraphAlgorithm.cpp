@@ -1,4 +1,5 @@
 /*
+ * Graph Algorithm File
  * This will provide the major algos related to graph
  * i am plannig to implement the following
  * 1. DFS
@@ -19,6 +20,7 @@
 
 #include "Graph.h"
 #include <queue>
+#include <limits>
 
 using namespace std;
 
@@ -35,8 +37,6 @@ class GraphAlgorithm
 		Node<T>* tempNode;
 		tempNode = g->getDataListPointer ();
 		
-		if (tempNode[node_number].getData() == data)
-			 //cout<<"Match....!!\n";
 		if (tempNode[node_number].getData() == data)
 			return true;
 
@@ -149,6 +149,7 @@ class GraphAlgorithm
 	{
 		unsigned int numNodes = g->getNoOfNodes ();
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
+		
 		unsigned int* inDegree = new unsigned int[numNodes];
 		std::list<unsigned int>* resultList = new std::list<unsigned int>;
 
@@ -170,7 +171,6 @@ class GraphAlgorithm
 			unsigned int temp = q.front ();
 			visited[temp]=true;
 			
-			//cout<<temp<<" -> ";
 			resultList->push_back (temp);
 			q.pop ();
 
@@ -192,6 +192,56 @@ class GraphAlgorithm
 	
 		return resultList;
 	}
+	void shortestPath (Graph<T>* g,unsigned int from,unsigned int to)
+	{
+		unsigned int numNodes = g->getNoOfNodes ();
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
+
+		unsigned int *shortestPath = new unsigned int[numNodes];
+		visited = new bool[numNodes];
+		
+		for (unsigned int i=0;i<numNodes;i++)
+		{
+			shortestPath[i] = std::numeric_limits<unsigned int>::max();
+			visited[i] = false;
+		}
+
+		visited[from] = true;
+		shortestPath[from] = 0;
+	
+		bool loop_invariant = true;
+		unsigned int current_node = from;
+		
+		while (loop_invariant)
+		{
+			loop_invariant = false;
+
+			for (std::list<Edge>::iterator it=tempList[current_node].begin ();it!=tempList[current_node].end();it++)
+			{
+				if (shortestPath[it->to] > (shortestPath[current_node] + it->weight))
+					shortestPath[it->to] = shortestPath[current_node] + it->weight;
+			}
+
+			visited[current_node] = true;
+			unsigned int temp_min = std::numeric_limits<unsigned int>::max ();
+
+			for (unsigned int i=0;i<numNodes;i++)
+			{
+				if ((shortestPath[i] < temp_min) && visited[i] == false)
+				{
+					current_node = i;
+					temp_min = shortestPath[i];
+					loop_invariant = true;
+				}
+			}
+		}
+
+		cout<<"Shortest Dist Is "<<shortestPath[to]<<"\n";
+
+		delete[] visited;
+		delete[]shortestPath;
+
+	}
 
 
 
@@ -203,6 +253,7 @@ int main ()
 {
 	Graph<int> g(7,true);
 	Graph<int> g2(6);
+	Graph<int> g3(4);
 
 	g.addConnection (0,1);
 	g.addConnection (0,2);
@@ -245,6 +296,7 @@ int main ()
 
 	/*
 	* Test Case -2
+		std::list<unsigned int>* resultList = new std::list<unsigned int>;
 	*/
 
 	if (ga.dfs (&g,7) == true)
@@ -340,9 +392,11 @@ int main ()
 	/*
 	 * Testing Topological Sort 
 	 */
+
 	/*
 	 * Test Case -1
 	 */
+
 	ga.topologicalSort (&g);
 
 	/*
@@ -361,11 +415,32 @@ int main ()
 	/*
 	 * Test Case -2
 	 */
+
 	std::list<unsigned int>* result;
 	result = ga.topologicalSort (&g2);
 	for (std::list<unsigned int>::iterator it=result->begin ();it!=result->end();it++)
 		cout<<*it<<"-> ";
 	cout<<"\n";
+
+
+	/*
+	 * Testing shortest path
+	 */
+
+	/*
+	 * Graph For Test Case 1
+	 */
+
+
+	g3.addConnection (0,1,1);
+	g3.addConnection (0,2,4);
+	g3.addConnection (1,2,2);
+	g3.addConnection (1,3,6);
+	g3.addConnection (2,3,3);
+
+	ga.shortestPath (&g3,0,3);
+	ga.shortestPath (&g3,0,2);
+
 	
 	return 0;
 }
