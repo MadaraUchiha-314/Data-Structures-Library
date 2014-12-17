@@ -212,12 +212,15 @@ class GraphAlgorithm
 		visited=NULL;
 		return resultList;
 	}
-	void shortestPath (Graph<T>* g,unsigned int from,unsigned int to)
+
+	unsigned int shortestPath (Graph<T>* g,unsigned int from,unsigned int to)
 	{
 		unsigned int numNodes = g->getNoOfNodes ();
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
+		
+		unsigned int result;
 
-		unsigned int *shortestPath = new unsigned int[numNodes];
+		unsigned int  *shortestPath = new unsigned int[numNodes];
 		visited = new bool[numNodes];
 		
 		for (unsigned int i=0;i<numNodes;i++)
@@ -255,13 +258,15 @@ class GraphAlgorithm
 				}
 			}
 		}
-
-		cout<<"Shortest Dist Is "<<shortestPath[to]<<"\n";
-
+		
+		result = shortestPath[to];
+	
 		delete[] visited;
-		visited = NULL;
 		delete[]shortestPath;
-
+		visited = NULL;
+		
+		return result;
+	
 	}
 
 
@@ -480,12 +485,7 @@ int main ()
 	g4.addConnection (3,4,2);
 	g4.addConnection (4,5,1);
 
-	for (unsigned int i=0;i<6;i++)
-	{
-		cout<<"to -> "<<i<<" ";
-		ga.shortestPath (&g4,0,i);
-	}
-	
+	cout<<"Shortest Path From 0 to 5 is "<<ga.shortestPath (&g4,0,5) <<"\n";
 
 	return 0;
 }
