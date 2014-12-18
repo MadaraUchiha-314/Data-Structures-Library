@@ -269,6 +269,42 @@ class GraphAlgorithm
 	
 	}
 
+	unsigned int isEulerian (Graph<T>* g)
+	{
+		unsigned int numNodes = g->getNoOfNodes ();
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
+
+		unsigned int *inDegree = new unsigned int [numNodes];
+		findInDegreeOfNodes (g,inDegree);
+
+		unsigned int countIn = 0;
+		unsigned int countOut = 0;
+
+		for (unsigned int i=0;i<numNodes;i++)
+		{
+			if (tempList[i].size() == inDegree[i])
+				continue;
+			else if (tempList[i].size () == inDegree[i]+1)
+				countOut++;
+			else if (tempList[i].size () == inDegree[i]-1)
+				countIn++;
+			else 
+				return 0;
+
+			if (countIn >1 || countOut>1)
+				return 0;
+		}
+
+		if (countIn==0 && countOut==0)
+			return 1;
+		else if (countIn==1 && countOut==1)
+			return 2;
+		else
+			return 0;
+				
+
+	}
+
 
 
 
@@ -281,6 +317,7 @@ int main ()
 	Graph<int> g2(6);
 	Graph<int> g3(4);
 	Graph<int> g4(6);
+	Graph<int> g5(3);
 	
 	g.addConnection (0,1);
 	g.addConnection (0,2);
@@ -486,6 +523,17 @@ int main ()
 	g4.addConnection (4,5,1);
 
 	cout<<"Shortest Path From 0 to 5 is "<<ga.shortestPath (&g4,0,5) <<"\n";
+
+
+	/*
+	 * Testing Eulerian
+	 */
+
+	g5.addConnection (0,1);
+	g5.addConnection (1,2);
+	g5.addConnection (2,0);
+
+	cout<<"\n Eulerian test "<<ga.isEulerian(&g5)<<"\n";
 
 	return 0;
 }
