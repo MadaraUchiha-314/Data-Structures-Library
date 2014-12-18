@@ -289,11 +289,19 @@ class GraphAlgorithm
 			else if (tempList[i].size () == inDegree[i]-1)
 				countIn++;
 			else 
+			{
+				delete[] inDegree;
 				return 0;
+			}
 
 			if (countIn >1 || countOut>1)
+			{
+				delete[] inDegree;
 				return 0;
+			}
 		}
+
+		delete[] inDegree;
 
 		if (countIn==0 && countOut==0)
 			return 1;
@@ -304,7 +312,8 @@ class GraphAlgorithm
 				
 
 	}
-
+	
+	
 
 
 
