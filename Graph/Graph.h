@@ -18,7 +18,7 @@
  */
 /*
  * This library does not really take note on the data that the graph will store 
- * but will rather look at the connections and theier weight
+ * but will rather look at the connections and their weight
  * but at some point of time it may be required to manipulate the data so providing an optional class to store data
  */
 
@@ -57,9 +57,34 @@ class Edge
 	unsigned int to;
 	unsigned int weight;
 };
+
+/*
+* Extra class for various operations like priority_queue
+*/
+
+class NewEdge : public Edge
+{
+	public :
+	unsigned int from;
+};
+
+/*
+* Way to compare the edges using their their weights
+* This is used in the priority_queue  and all other functions that use it
+*/
+
+struct compareEdges
+{
+	bool operator() (const NewEdge& e1,const NewEdge& e2)
+	{
+		return e2.weight < e1.weight;
+	}
+};
+
 /*
  * Custom made exception for detecting connections between nodes that dont exist
  */
+
 class outOfBoundsException : public std::exception
 {
        virtual const char* what() const throw ()
@@ -167,6 +192,19 @@ class Graph
 			std::cout<<e.what ()<<"\n";	
 		}
 	}
+
+	void addUndirectedConnection (unsigned int from,unsigned int to,unsigned int weight)
+	{
+		addConnection (from,to,weight);
+		addConnection (to,from,weight);
+	}
+
+	void addUndirectedConnection (unsigned int from,unsigned int to)
+	{
+		addConnection (from,to,1);
+		addConnection (to,from,1);
+	}
+	
 	void addData (unsigned int nodeNumber,T data)
 	{
 		try
@@ -230,5 +268,6 @@ class Graph
 			std::cout<<e.what ()<<"\n";
 		}
 	}
+
 
 };

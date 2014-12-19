@@ -21,6 +21,7 @@
 #include "Graph.h"
 #include <queue>
 #include <limits>
+#include <vector>
 
 using namespace std;
 
@@ -49,10 +50,8 @@ class GraphAlgorithm
 					continue;
 				else
 					return true;
-
 			}
 		}
-
 
 	}
 	
@@ -303,18 +302,93 @@ class GraphAlgorithm
 
 		delete[] inDegree;
 
-		if (countIn==0 && countOut==0)
-			return 1;
-		else if (countIn==1 && countOut==1)
-			return 2;
+		if (countIn == 0 && countOut == 0)
+			return 1; // Euler Circuit Exists
+		else if (countIn == 1 && countOut == 1)
+			return 2; // Euler Path Exists
 		else
-			return 0;
+			return 0; // Nothing Exists
 				
 
 	}
-	
-	
 
+
+
+	void minimumSpanningTree (Graph<T>* g)
+	{
+		std::list<Edge>* tempList = g->getConnectionListPointer ();
+		unsigned int numNodes = g->getNoOfNodes ();
+
+		visited = new bool[numNodes];
+		unsigned int *value = new unsigned int [numNodes];
+
+		std::priority_queue<NewEdge,std::vector<NewEdge>,compareEdges> pq;
+
+		for (unsigned int i=0;i<numNodes;i++)
+		{
+			visited[i] = false;
+			value[i] = std::numeric_limits<unsigned int>::max();
+		}
+
+		// Taking a root node and adding all its edges to the priority_queue
+
+		for (std::list<Edge>::iterator it=tempList[0].begin ();it!=tempList[0].end();it++)
+		{
+			NewEdge e;
+			e.from = 0;
+			e.to = it->to;
+			e.weight = it->weight;
+
+			value[e.to] = e.weight ;
+			pq.push (e);
+		}
+
+		visited[0] = true;
+		value[0] = 0;
+
+		while (!pq.empty())
+		{
+			NewEdge e2 = pq.top ();
+			pq.pop ();
+
+			if (visited[e2.to]==false && (value[e2.to] > e2.weight))
+			{
+				value[e2.to] = e2.weight;
+
+			}	
+			
+			
+ 			if (visited[e2.to] == false)
+			{	for (std::list<Edge>::iterator it = tempList[e2.to].begin();it!=tempList[e2.to].end();it++)
+				{
+					NewEdge e3 ;
+					e3.from = e2.to;
+					e3.to = it->to;
+					e3.weight = it->weight;
+
+					value
+					pq.push (e3);
+				}
+			}
+
+			visited[e2.to] = true;
+
+
+		}
+
+	unsigned int sum = 0;
+
+	for (unsigned int i=0;i<numNodes;i++)
+		sum+=value[i];	
+
+	cout<<"Weight Of Min Spanning tree is  "<<sum<<"\n";
+
+	delete[] value;
+	delete[] visited;
+	visited=NULL;
+
+
+	}
 
 
 };
@@ -327,6 +401,7 @@ int main ()
 	Graph<int> g3(4);
 	Graph<int> g4(6);
 	Graph<int> g5(3);
+	Graph<int> g6(7);
 	
 	g.addConnection (0,1);
 	g.addConnection (0,2);
@@ -369,7 +444,6 @@ int main ()
 
 	/*
 	* Test Case -2
-		std::list<unsigned int>* resultList = new std::list<unsigned int>;
 	*/
 
 	if (ga.dfs (&g,7) == true)
@@ -543,6 +617,22 @@ int main ()
 	g5.addConnection (2,0);
 
 	cout<<"\n Eulerian test "<<ga.isEulerian(&g5)<<"\n";
+
+
+
+	g6.addUndirectedConnection (0,1,1);
+	g6.addUndirectedConnection (1,2,2);
+	g6.addUndirectedConnection (2,3,6);
+	g6.addUndirectedConnection (3,4,3);
+	g6.addUndirectedConnection (4,6,1);
+	g6.addUndirectedConnection (6,1,2);
+	g6.addUndirectedConnection (0,5,3);
+	g6.addUndirectedConnection (1,5,1);
+	g6.addUndirectedConnection (3,5,3);
+	g6.addUndirectedConnection (4,5,4);
+	g6.addUndirectedConnection (6,5,1);
+
+	ga.minimumSpanningTree (&g6);
 
 	return 0;
 }
