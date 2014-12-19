@@ -314,7 +314,7 @@ class GraphAlgorithm
 
 
 
-	void minimumSpanningTree (Graph<T>* g)
+	unsigned int minimumSpanningTree (Graph<T>* g)
 	{
 		std::list<Edge>* tempList = g->getConnectionListPointer ();
 		unsigned int numNodes = g->getNoOfNodes ();
@@ -365,8 +365,6 @@ class GraphAlgorithm
 					e3.from = e2.to;
 					e3.to = it->to;
 					e3.weight = it->weight;
-
-					value
 					pq.push (e3);
 				}
 			}
@@ -381,12 +379,11 @@ class GraphAlgorithm
 	for (unsigned int i=0;i<numNodes;i++)
 		sum+=value[i];	
 
-	cout<<"Weight Of Min Spanning tree is  "<<sum<<"\n";
-
 	delete[] value;
 	delete[] visited;
 	visited=NULL;
-
+	
+	return sum;
 
 	}
 
@@ -618,6 +615,9 @@ int main ()
 
 	cout<<"\n Eulerian test "<<ga.isEulerian(&g5)<<"\n";
 
+	/*
+	 * Graph for Minimum spanning tree
+	 */
 
 
 	g6.addUndirectedConnection (0,1,1);
@@ -632,7 +632,11 @@ int main ()
 	g6.addUndirectedConnection (4,5,4);
 	g6.addUndirectedConnection (6,5,1);
 
-	ga.minimumSpanningTree (&g6);
+	/*
+	 * Testing MST
+	 */
+
+	cout<<"The weight of the mnimum spanning tree is "<<ga.minimumSpanningTree (&g6)<<"\n";
 
 	return 0;
 }
