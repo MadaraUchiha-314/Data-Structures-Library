@@ -15,11 +15,10 @@ Currently Implemented Data Structures Are :
 3. Vector
 4. Binary Search Tree (BST)
 5. Image Handler For BMP Files
-
+6. An Extensive Graph Library
 
 Currently Working On :
 
-1. An Extensive Graph Library
-2. Queue - Both Normal and Priority
-3. Heap
-4. Balanced BST
+1. Queue - Both Normal and Priority
+2. Heap
+3. Balanced BST
