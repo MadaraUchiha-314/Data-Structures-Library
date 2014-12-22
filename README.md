@@ -14,8 +14,7 @@ Currently Implemented Data Structures Are :
 2. Stack 
 3. Vector
 4. Binary Search Tree (BST)
-5. Image Handler For BMP Files
-6. An Extensive Graph Library
+5. An Extensive Graph Library
 
 Currently Working On :
 
