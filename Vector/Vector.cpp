@@ -1,5 +1,5 @@
 #include <iostream>
-#include <stdio.h>
+#include <cstdio>
 #include <cstdlib>
 using namespace std;
 
@@ -40,7 +40,7 @@ class Vector
 
 // Function To Add Elements	
 
-	void addElement (T data)
+	void push_back (T data)
 	{
 		if (memAvail==0)
 		{		
@@ -65,7 +65,7 @@ class Vector
 
 // Reserves Memory Of Total Size Elements...Includes The Current Elements  + Memory Available
 
-	void reserveMem (unsigned int size)
+	void reserve (unsigned int size)
 	{
 			if (size > (numEle+memAvail) )
 			{
@@ -82,14 +82,14 @@ class Vector
 
 // Tells The Total Number OF Elements The Vector Can Hold
 		
-	unsigned int tellCapacity ()
+	unsigned int capacity ()
 	{
 		return numEle+memAvail;
 	}
 
 // Makes The Vector Back To The Original Required Size
 	
-	void shrinkToFit ()
+	void shrink_to_fit ()
 	{
 		ptr=(T*)realloc (ptr,numEle*sizeof (T));
 		memAvail=0;
@@ -97,22 +97,14 @@ class Vector
 
 // Tells The Current Size Of The Vector
 
-	unsigned int tellSize ()
+	unsigned int size ()
 	{
 		return numEle;
 	}
 
-// Function To Print Whole Vector	
-
-	void printVector ()
-	{
-		for (int i=0;i<numEle;i++)
-			cout<<ptr[i]<<"\t";
-	}
-
 // Function To Replace Element
 
-	int  replaceElement (T data,unsigned int index)
+	int insert (unsigned int index,T data)
 	{
 		if (index < numEle )
 		{	
@@ -130,19 +122,18 @@ class Vector
 
 // Function To Delete A Given Index
 
-	int deleteElement (unsigned int index)
+	int erase (unsigned int index)
 	{	
 			int i;
-			T *temp;
+			
 					
 		if (index < numEle)
 		{
-			
 			for (i=index;i<this->numEle-1;i++)
 			{
 			
 				ptr[i]=ptr[i+1];
-				temp++;
+				
 			}
 			numEle--;
 			return 1;
@@ -151,17 +142,46 @@ class Vector
 		{
 			return 0;
 		}
-			temp++;
-			free (temp);
-	
+			
 	}
 
 
 // Function To Get The Pointer To The First Element
 
-	T* getPointerToFirstElement ()
+	T* begin ()
 	{	
 		return ptr;	
+	}
+
+// Function To Get The Pointer To The Last Element
+
+	T* end ()
+	{	
+		return ptr+numEle;	
+	}
+	
+// Tells whether the Vector is empty
+
+	bool empty ()
+	{
+		if (numEle==0)
+			return true;
+		else
+			return false;
+	}
+
+// Returns the value of the front most element
+
+	T front ()
+	{
+		return *ptr;
+	}
+
+// Returns the value of the last element of the vector
+
+	T back ()
+	{
+		return ptr[numEle-1];
 	}
 
 // Overloaded The Operators
@@ -182,6 +202,55 @@ class Vector
 		else
 			return ptr[index];
 	}
+
+	class iterator : public std::iterator<std::forward_iterator_tag,T*>
+	{
+		T* itr;
+
+		public :
+
+		iterator (T* temp) : itr(temp) {}
+		iterator (const iterator& myitr) : itr(myitr.itr) {}
+		iterator& operator++ ()
+		{
+			itr = ++itr;;
+			return *this;
+
+		}
+		iterator operator++ (int) 
+		{
+  			iterator result(*this);
+ 			++*this;
+  			return result;
+		}
+
+		bool operator== (const iterator& rhs) 
+		{
+			return itr == rhs.itr;
+
+		}
+		bool operator!= (const iterator& rhs) 
+		{
+			return itr != rhs.itr;
+
+		}
+		T& operator*()
+		{
+			return *itr;
+		}
+	
+	};
+
+
+
+
+// Function To Print Whole Vector	
+
+	void printVector ()
+	{
+		for (int i=0;i<numEle;i++)
+			cout<<ptr[i]<<"\t";
+	}
 		
 	
 };
@@ -192,13 +261,13 @@ int main ()
 	Vector<int> v(15);
 	
 	for (int i=0;i<6;i++)
-		v.addElement (i);
+		v.push_back (i);
 	
 	cout<<"\n";
 	v.printVector ();
 	
 	cout<<"\n";
-	v.addElement (17);
+	v.push_back (17);
 	
 	v.printVector ();
 	cout<<"\n";
@@ -208,30 +277,36 @@ int main ()
 	v.printVector ();
 
 	cout<<"\n";
-	v.replaceElement (9,4);
+	v.insert (4,9);
 		
 	v.printVector ();
 	
 	cout<<"\n";
-	v.deleteElement (2);
+	v.erase (2);
 
 	v.printVector ();
 
 	cout<<"\n";
 	 
-	v.reserveMem (100);
+	v.reserve (100);
 	cout<<"\n";
-	cout<<v.tellCapacity ();
+	cout<<v.capacity ();
 	
 	cout<<"\n";
 	v.printVector ();
 
-	v.shrinkToFit ();
+	v.shrink_to_fit ();
 	
 	cout<<"\n";
 	v.printVector ();
+
 	cout<<"\n";
-	cout<<v.tellCapacity ();
+	cout<<v.capacity ();
+
+	cout<<"\n";
+
+	for (Vector<int>::iterator it=v.begin ();it!=v.end();it++)
+		cout<<*it<<"\t";
 	cout<<"\n";
 
 return 0;
