@@ -61,7 +61,8 @@ class LinkedList
 			for (int i=0;i<index;i++)
 				temp=temp->next;
 		}
-	return temp->data;
+		
+		return temp->data;
 	
 	}
 
@@ -75,6 +76,14 @@ class LinkedList
 	node<T>* end ()
 	{
 		return NULL;
+	}
+
+	bool empty ()
+	{
+		if (numElements==0)
+			return true;
+		else
+			return false;
 	}
 	// Acessor Function Of Class LinkedList - Returns The Number Of Elements In The List	
 
