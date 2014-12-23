@@ -15,16 +15,28 @@ class Stack
 	private :
 	node<T> *start;
 	unsigned int numElements;
+
+	node<T>* createNewNode (T data1)
+	{
+		node<T> *temp;	
+		temp = new node<T>;
+		temp->data=data1;
+		temp->next=NULL;
+
+	return temp;
+	}
+	
+
 	
 	public :
-// Constructor
-	
+
+	// Constructor	
 	Stack ()
 	{
 		start=NULL;
 		numElements=0;
 	}
-// Destructor
+	// Destructor
 	~Stack ()
 	{
 		node<T> *temp;	
@@ -36,11 +48,11 @@ class Stack
 		}
 	}
 
-// getDataAtIndex Function
-/*
- Returns Data At Given Index As Argument.
-   If Index Is Invalid The Returns The Data Of 1st Element 
-*/	
+	// getDataAtIndex Function
+	/*
+	 Returns Data At Given Index As Argument.
+	   If Index Is Invalid The Returns The Data Of 1st Element 
+	*/	
 	T getDataAtIndex (unsigned int index)
 	{
 		node<T> *temp=start;		
@@ -53,28 +65,46 @@ class Stack
 	return temp->data;
 	
 	}
-// Acessor Function Of Class LinkedList	- Returns The Start Pointer Of The Linked List
 
-	node<T>* getStartPointer ()
+	unsigned int getIndexOf (T data1)
+	{
+		unsigned int index=0;		
+		node<T> *temp=start;
+		
+		while (temp!=NULL)
+		{	
+			if (temp->data == data1)	
+				return index;
+			index++;
+			temp=temp->next;
+		}
+		
+	return -1;
+	}
+
+
+	T top ()
+	{
+		return start->data;
+	}
+	// Acessor Function Of Class LinkedList	- Returns The Start Pointer Of The Linked List
+
+	node<T>* begin ()
 	{
 		return start;
 	}
 
-	node<T>* createNewNode (T data1)
-	{
-		node<T> *temp;	
-		temp = new node<T>;
-		temp->data=data1;
-		temp->next=NULL;
-	return temp;
-	}
-	
 
-// Inserts A Given Node At Begenning Of List
-/* 
-Returns 0 If No Memory Along With Error Message
-Returns 1 If Sucessfully Inserted
-*/ 	
+	node<T>* end ()
+	{
+		return NULL;
+	}
+
+	// Inserts A Given Node At Begenning Of List
+	/* 
+	Returns 0 If No Memory Along With Error Message
+	Returns 1 If Sucessfully Inserted
+	*/ 	
 
 	int push (T data1)
 	{
@@ -101,14 +131,14 @@ Returns 1 If Sucessfully Inserted
 				numElements++;
 			}
 		}
-return 1;
+	return 1;
 	}
 
-// Deletes Node From Begenning Of List
-/*
-Returns 0 If Empty List
-Returns 1 If Sucessfully Deleted
-*/
+	// Deletes Node From Begenning Of List
+	/*
+	Returns 0 If Empty List
+	Returns 1 If Sucessfully Deleted
+	*/
 
 	int pop ()
 	{
@@ -127,24 +157,12 @@ Returns 1 If Sucessfully Deleted
 		return 1;
 		}
 	}
-	
-	unsigned int getIndexOf (T data1)
+
+	unsigned int size ()
 	{
-		unsigned int index=0;		
-		node<T> *temp=start;
-		
-		while (temp!=NULL)
-		{	
-			if (temp->data == data1)	
-				return index;
-			index++;
-			temp=temp->next;
-		}
-		
-	return -1;
+		return numElements;
 	}
 	
-			
 	void printStack ()
 	{
 		cout<<"\n";		
@@ -156,11 +174,51 @@ Returns 1 If Sucessfully Deleted
 		}	
 		cout<<"\n";
 	}
-	
-	
+
+
+	class iterator : public std::iterator<std::forward_iterator_tag,node<T>*>
+	{
+		node<T>* itr;
+
+		public :
+
+		iterator (node<T>* temp) : itr(temp) {}
+		iterator (const iterator& myitr) : itr(myitr.itr) {}
+		iterator& operator++ ()
+		{
+			itr = itr->next;
+			return *this;
+
+		}
+		iterator operator++ (int) 
+		{
+  			iterator result(*this);
+ 			++*this;
+  			return result;
+		}
+
+		bool operator== (const iterator& rhs) 
+		{
+			return itr == rhs.itr;
+
+		}
+		bool operator!= (const iterator& rhs) 
+		{
+			return itr != rhs.itr;
+
+		}
+		T& operator*()
+		{
+			return itr->data;
+		}
+		T *operator->() 
+		{
+  			return &itr->data;
+		}
+
+	};
 
 	
-
 };
 
 int main ()
@@ -181,7 +239,13 @@ int main ()
 	S.printStack();
 
 	
-cout<<"\n Index Of 4 Is  "<<S.getIndexOf (4)<<"\n";
+	cout<<"\n Index Of 4 Is  "<<S.getIndexOf (4)<<"\n";
+
+	for (Stack<int>::iterator it = S.begin ();it!=S.end ();it++)
+	{
+		cout<<*it<<"\t";
+	}
+	cout<<"\n";
 
 	
 
