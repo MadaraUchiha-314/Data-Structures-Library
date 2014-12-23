@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iterator>
 
 using namespace std;
 
@@ -15,15 +16,26 @@ class LinkedList
 	private :
 	node<T> *start;
 	unsigned int numElements;
+
+	// Creates A New Node. Puts The Data Into The Node. Returns The Pointer Of The Node Created
+
+	node<T>* createNewNode (T data1)
+	{
+		node<T> *temp;	
+		temp = new node<T>;
+		temp->data=data1;
+		temp->next=NULL;
+	return temp;
+	}
 	
 	public :
-// Constructor	
+	// Constructor	
 	LinkedList ()
 	{
 		start=NULL;
 		numElements=0;
 	}
-// Destructor	
+	// Destructor	
 	~LinkedList ()
 	{
 		node<T> *temp;	
@@ -35,53 +47,50 @@ class LinkedList
 		}
 	}
 
-// getDataAtIndex Function
-/*
- Returns Data At Given Index As Argument.
-   If Index Is Invalid The Returns The Data Of 1st Element 
-*/	
+	// getDataAtIndex Function
+	/*
+	   Returns Data At Given Index As Argument.
+	   If Index Is Invalid The Returns The Data Of 1st Element 
+	*/	
+
 	T getDataAtIndex (unsigned int index)
 	{
 		node<T> *temp=start;		
 		if (index < numElements)
 		{		
-			node<T> *temp=start;		
 			for (int i=0;i<index;i++)
-				temp=start->next;
+				temp=temp->next;
 		}
 	return temp->data;
 	
 	}
-// Acessor Function Of Class LinkedList	- Returns The Start Pointer Of The Linked List
 
-	node<T>* getStartPointer ()
+	// Acessor Function Of Class LinkedList	- Returns The Start Pointer Of The Linked List
+
+	node<T>* begin ()
 	{
 		return start;
 	}
-// Acessor Function Of Class LinkedList - Returns The Number Of Elements In The List	
 
-	unsigned int getNumberOfElements ()
+	node<T>* end ()
+	{
+		return NULL;
+	}
+	// Acessor Function Of Class LinkedList - Returns The Number Of Elements In The List	
+
+	unsigned int size ()
 	{
 		return numElements;
 	}
-// Creates A New Node. Puts The Data Into The Node. Returns The Pointer Of The Node Created
 
-	node<T>* createNewNode (T data1)
-	{
-		node<T> *temp;	
-		temp = new node<T>;
-		temp->data=data1;
-		temp->next=NULL;
-	return temp;
-	}
 
-// Inserts A Given Node At Begenning Of List
-/* 
-Returns 0 If No Memory Along With Error Message
-Returns 1 If Sucessfully Inserted
-*/ 	
+	// Inserts A Given Node At Begenning Of List
+	/* 
+	Returns 0 If No Memory Along With Error Message
+	Returns 1 If Sucessfully Inserted
+	*/ 	
 
-	int insertAtBeg (T data1)
+	int push_front (T data1)
 	{
 		node<T> *temp;
 		temp=createNewNode (data1);
@@ -113,7 +122,7 @@ return 1;
 Returns 0 If No Memory Along With Error Message
 Returns 1 If Sucessfully Inserted
 */ 
-	int insertAtEnd (T data1)
+	int push_back (T data1)
 	{
 		node<T> *temp;
 		node<T> *ptr=start;
@@ -153,15 +162,15 @@ Returns 0 If No Memory Along With Error Message
 Returns 1 If Sucessfully Inserted
 */ 
 
-	int  insertAtIndex (T data1,unsigned int index)
+	int insert(unsigned int index,T data1)
 	{
 		node<T> *ptr;
 		ptr=start;	
 		
 		if (index==0)
-			this->insertAtBeg (data1);
+			this->push_front (data1);
 		else if (index==(numElements-1))
-			this->insertAtEnd (data1);
+			this->push_back (data1);
 		else
 		{
 			node<T> *temp=createNewNode (data1);
@@ -184,13 +193,13 @@ Returns 1 If Sucessfully Inserted
 		}
 	}
 
-// Deletes Node From Begenning Of List
-/*
-Returns 0 If Empty List
-Returns 1 If Sucessfully Deleted
-*/
+	// Deletes Node From Begenning Of List
+	/*
+	Returns 0 If Empty List
+	Returns 1 If Sucessfully Deleted
+	*/
 
-	int deleteFromBeg ()
+	int pop_front ()
 	{
 		if (numElements==0)
 		{
@@ -208,14 +217,14 @@ Returns 1 If Sucessfully Deleted
 		}
 	}
 
-// Deletes Node From End Of List
-/*
-Returns 0 If Empty List
-Returns 1 If Sucessfully Deleted
-*/
+	// Deletes Node From End Of List
+	/*
+	Returns 0 If Empty List
+	Returns 1 If Sucessfully Deleted
+	*/
 
 
-	int deleteFromEnd ()
+	int pop_back ()
 	{
 		if (numElements==0)
 		{
@@ -238,7 +247,7 @@ Returns 1 If Sucessfully Deleted
 		}
 	}
 			
-	int deleteIndex (unsigned int index)
+	int remove (unsigned int index)
 	{
 		if (numElements==0)
 		{
@@ -250,9 +259,9 @@ Returns 1 If Sucessfully Deleted
 			node<T> *temp;
 			node<T> *ptr=start;		
 			if (index==0)
-				this->deleteFromBeg ();
+				this->pop_front ();
 			else if (index== (numElements-1) )	
-				this->deleteFromEnd ();
+				this->pop_back ();
 			else
 			{
 				for (int i=0;i<index-1;i++)
@@ -266,7 +275,7 @@ Returns 1 If Sucessfully Deleted
 		}
 	}
 	
-	unsigned int getIndexOf (T data1)
+	unsigned int search (T data1)
 	{
 		unsigned int index=0;		
 		node<T> *temp=start;
@@ -282,7 +291,7 @@ Returns 1 If Sucessfully Deleted
 	return -1;
 	}
 	
-	void mergeList (node<T> *ptr,unsigned int numberOfElements)
+	void merge (node<T> *ptr,unsigned int numberOfElements)
 	{
 		node<T> *temp=start;
 		// Make temp point to the starting of the first list
@@ -309,7 +318,50 @@ Returns 1 If Sucessfully Deleted
 		}	
 		cout<<"\n";
 	}
-	
+
+
+	class iterator : public std::iterator<std::forward_iterator_tag,node<T>*>
+	{
+		node<T>* itr;
+
+		public :
+
+		iterator (node<T>* temp) : itr(temp) {}
+		iterator (const iterator& myitr) : itr(myitr.itr) {}
+		iterator& operator++ ()
+		{
+			itr = itr->next;
+			return *this;
+
+		}
+		iterator operator++ (int) 
+		{
+  			iterator result(*this);
+ 			++*this;
+  			return result;
+		}
+
+		bool operator== (const iterator& rhs) 
+		{
+			return itr == rhs.itr;
+
+		}
+		bool operator!= (const iterator& rhs) 
+		{
+			return itr != rhs.itr;
+
+		}
+		T& operator*()
+		{
+			return itr->data;
+		}
+		T *operator->() 
+		{
+  			return &itr->data;
+		}
+
+	};
+
 
 };
 
@@ -319,47 +371,53 @@ int main ()
 	LinkedList<int> L2;
 
 	for (int i=1;i<6;i++)
-		L.insertAtBeg (i);
+		L.push_front (i);
 	for (int i=7;i<=10;i++)
-		L2.insertAtBeg (i);	
+		L2.push_front (i);	
 
 	L.printList ();
 
 	L2.printList ();
 	
-	L.insertAtBeg (6);
+	L.push_front (6);
 	
 	L.printList ();
 
-	L.insertAtEnd (0);
+	L.push_back (0);
 	
 	L.printList ();
 		
-	L.insertAtIndex (7,3);
+	L.insert (3,7);
 	
 	L.printList ();
 		
-	L.deleteFromBeg ();
+	L.pop_front();
 	
 	L.printList ();
 
-	L.deleteFromEnd ();
+	L.pop_back ();
 		
 	L.printList ();
 	
-	L.deleteIndex (2);
+	L.remove (2);
 	
 	L.printList ();
 	
-	L.mergeList (L2.getStartPointer (),L2.getNumberOfElements ());	
+	L.merge (L2.begin (),L2.size ());	
 
 	L.printList ();
 	
 		
-cout<<"\n Index Of 4 Is  "<<L.getIndexOf (4)<<"\n";
+	cout<<"\n Index Of 4 Is  "<<L.search (4)<<"\n";
 
-cout<<"\n Data At Index "<<L.getIndexOf (4) <<" Is "<<L.getDataAtIndex (L.getIndexOf (4))<<"\n";
-	
+	cout<<"\n Data At Index "<<L.search (4) <<" Is "<<L.getDataAtIndex (L.search (4))<<"\n";
+
+	for (LinkedList<int>::iterator it=L.begin ();it!=L.end ();it++)
+	{
+		cout<<*it<<"\t";
+	}
+	cout<<"\n";
+		
 
 return 0;
 }	
