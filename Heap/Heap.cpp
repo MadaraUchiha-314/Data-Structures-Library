@@ -99,9 +99,23 @@ void make_heap (RandomAccessIterator first,RandomAccessIterator last,Compare com
 	
 }
 
+
+template <class RandomAccessIterator>
+void push_heap (RandomAccessIterator first,RandomAccessIterator last)
+{
+	make_heap (first,last);
+}
+
+template <class RandomAccessIterator,typename Compare>
+void push_heap (RandomAccessIterator first,RandomAccessIterator last,Compare comp)
+{
+	make_heap (first,last,comp);
+}
+
+
 int main ()
 {
-	int a[7] = {1,5,3,4,7,8,2};
+	int a[8] = {1,5,3,4,7,8,2,6};
 
 	make_heap (&a[0],&a[6]);
 
@@ -109,6 +123,15 @@ int main ()
 		std::cout<<a[i]<<"\t";
 	
 	std::cout<<"\n";
+
+	push_heap (&a[0],&a[7]);
+
+	for (int i=0;i<8;i++)
+		std::cout<<a[i]<<"\t";
+	
+	std::cout<<"\n";
+
+
 
 
 	int b[7] = {7,6,5,4,3,2,1};
