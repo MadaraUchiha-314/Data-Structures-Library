@@ -19,6 +19,7 @@ Currently Implemented Data Structures Are :
 3. Vector
 4. Binary Search Tree (BST)
 5. An Extensive Graph Library
+6. Segment Tree
 
 Currently Working On :
 
